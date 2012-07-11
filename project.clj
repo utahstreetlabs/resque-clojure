@@ -1,4 +1,4 @@
-(defproject utahstreetlabs/resque-clojure "0.2.3"
+(defproject utahstreetlabs/resque-clojure "0.2.4-SNAPSHOT"
   :description "Redis based library for asynchronous processing"
   :url "https://github.com/jxa/resque-clojure"
   :dependencies [[org.clojure/data.json "0.1.2"]
