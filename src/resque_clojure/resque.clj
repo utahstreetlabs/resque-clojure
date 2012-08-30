@@ -29,8 +29,8 @@
    Returns a hash of: {:queue \"queue-name\" :data {...}} or nil"
   (let [msg (-dequeue-randomized queues)]
     (if msg
-      (let [{:keys [class args context]} (json/read-json (:data msg))]
-        (assoc msg :func class :args args :context context)))))
+      (let [{:keys [class args] :as data} (json/read-json (:data msg))]
+        (assoc msg :func class :args args :data data)))))
 
 (defn report-error [result]
   (redis/rpush (-namespace-key "failed") (json/json-str (-format-error result))))
