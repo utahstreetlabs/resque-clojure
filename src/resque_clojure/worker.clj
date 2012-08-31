@@ -4,7 +4,7 @@
 
 (def config (atom {}))
 
-(def ^:dynamic *log-weasel-id*)
+(def ^:dynamic *resque-job-data*)
 
 (defn configure [c]
   "use the config map entry :lookup-fn to override the default lookup-fn for jobs found in resque
@@ -18,13 +18,13 @@
     (ns-resolve (symbol namespace) (symbol fun))))
 
 (defn work-on [state {:keys [func args queue data] :as job}]
-  (let [resolver (or (:lookup-fn @config) lookup-fn)]
-    (binding [*log-weasel-id* (:log_weasel_id (:context data))]
+  (binding [*resque-job-data* data]
+    (let [resolver (or (:lookup-fn @config) lookup-fn)]
       (try
         (apply (resolver func) args)
         {:result :pass :job job :queue queue}
         (catch Exception e
-          {:result :error :exception e :job job :queue queue})))))
+          {:result :error :exception e :job job :queue queue})))) )
 
 (defn name [queues]
   (let [pid-host (.getName (java.lang.management.ManagementFactory/getRuntimeMXBean))
